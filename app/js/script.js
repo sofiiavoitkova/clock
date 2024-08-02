@@ -1,4 +1,6 @@
 let currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+let manualControlMode = null;
+let intervalId = null; // Store interval ID for starting/stopping clock
 
 const timeZones = [
   { name: "Local Time", value: currentTimeZone },
@@ -9,9 +11,17 @@ const timeZones = [
   { name: "Tokyo (JST)", value: "Asia/Tokyo" },
 ];
 
-function setCurrentTime() {
-  const day = new Date();
+const manualControls = [
+  { name: "Restart a clock" },
+  { name: "Stop to set a time" },
+];
 
+function setCurrentTime() {
+  if (manualControlMode === "Stop to set a time") {
+    return;
+  }
+
+  const day = new Date();
   const localTime = new Date(
     day.toLocaleString("en-US", { timeZone: currentTimeZone })
   );
@@ -35,9 +45,16 @@ function setCurrentTime() {
   ).style.transform = `rotate(${secondHand}deg)`;
 }
 
-setInterval(setCurrentTime, 1000);
+function startClock() {
+  intervalId = setInterval(setCurrentTime, 1000);
+  setCurrentTime(); // Initial call to set time immediately
+}
 
-setCurrentTime();
+function stopClock() {
+  clearInterval(intervalId);
+}
+
+startClock();
 
 const timeZoneSelector = document.createElement("select");
 timeZoneSelector.classList.add("timezone-select");
@@ -48,11 +65,30 @@ timeZones.forEach((zone) => {
   timeZoneSelector.appendChild(option);
 });
 
-document
-  .querySelector(".main")
-  .insertBefore(timeZoneSelector, document.querySelector(".clockbox"));
+document.querySelector(".main").appendChild(timeZoneSelector);
 
 timeZoneSelector.addEventListener("change", (e) => {
   currentTimeZone = e.target.value;
   setCurrentTime();
+});
+
+const manualControlSelector = document.createElement("select");
+manualControlSelector.classList.add("manual-control-select");
+manualControls.forEach((control) => {
+  const option = document.createElement("option");
+  option.value = control.name;
+  option.textContent = control.name;
+  manualControlSelector.appendChild(option);
+});
+
+document.querySelector(".main").appendChild(manualControlSelector);
+
+manualControlSelector.addEventListener("change", (e) => {
+  manualControlMode = e.target.value;
+
+  if (manualControlMode === "Stop to set a time") {
+    stopClock();
+  } else if (manualControlMode === "Restart a clock") {
+    startClock();
+  }
 });
