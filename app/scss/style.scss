@@ -1,14 +1,16 @@
 .main {
   display: flex;
   padding: 2em;
-  height: 90px;
+  height: auto; /* Adjust height to auto for better flexbox handling */
   justify-content: center;
-  align-items: middle;
+  align-items: center; /* Center elements horizontally */
+  position: relative;
 }
 
 .clockbox,
 #clock {
   width: 100%;
+  max-width: 600px; /* Ensure the clock has a maximum width */
 }
 
 /* Clock styles */
@@ -22,6 +24,7 @@
 .mid-circle {
   fill: #000;
 }
+
 .hour-marks {
   fill: none;
   stroke: #000;
@@ -60,5 +63,27 @@
 #minute,
 #second {
   transform-origin: 300px 300px;
-  transition: transform .5s ease-in-out;
+  transition: transform 0.5s ease-in-out;
+}
+
+select.timezone-select {
+  position: absolute;
+  top: 10px;
+  left: 10px; /* Position on the left */
+  padding: 5px;
+  font-size: 16px;
+}
+
+select.manual-control-select {
+  position: absolute;
+  top: 90px;
+  left: 10px; /* Position on the right */
+  padding: 5px;
+  font-size: 16px;
+}
+
+.hour-hand,
+.minute-hand,
+.second-hand {
+  cursor: pointer;
 }
