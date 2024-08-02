@@ -1,16 +1,16 @@
 .main {
   display: flex;
   padding: 2em;
-  height: auto; /* Adjust height to auto for better flexbox handling */
+  height: auto;
   justify-content: center;
-  align-items: center; /* Center elements horizontally */
+  align-items: center;
   position: relative;
 }
 
 .clockbox,
 #clock {
   width: 100%;
-  max-width: 600px; /* Ensure the clock has a maximum width */
+  max-width: 600px;
 }
 
 /* Clock styles */
@@ -53,12 +53,10 @@
   stroke-miterlimit: 10;
 }
 
-/* Transparent box ensuring arms center properly. */
 .sizing-box {
   fill: none;
 }
 
-/* Make all arms rotate around the same center point. */
 #hour,
 #minute,
 #second {
@@ -69,7 +67,7 @@
 select.timezone-select {
   position: absolute;
   top: 10px;
-  left: 10px; /* Position on the left */
+  left: 10px;
   padding: 5px;
   font-size: 16px;
 }
@@ -77,7 +75,7 @@ select.timezone-select {
 select.manual-control-select {
   position: absolute;
   top: 90px;
-  left: 10px; /* Position on the right */
+  left: 10px;
   padding: 5px;
   font-size: 16px;
 }
