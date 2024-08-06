@@ -1,14 +1,16 @@
 .main {
   display: flex;
   padding: 2em;
-  height: 90px;
+  height: auto;
   justify-content: center;
-  align-items: middle;
+  align-items: center;
+  position: relative;
 }
 
 .clockbox,
 #clock {
   width: 100%;
+  max-width: 600px;
 }
 
 /* Clock styles */
@@ -22,6 +24,7 @@
 .mid-circle {
   fill: #000;
 }
+
 .hour-marks {
   fill: none;
   stroke: #000;
@@ -50,15 +53,35 @@
   stroke-miterlimit: 10;
 }
 
-/* Transparent box ensuring arms center properly. */
 .sizing-box {
   fill: none;
 }
 
-/* Make all arms rotate around the same center point. */
 #hour,
 #minute,
 #second {
   transform-origin: 300px 300px;
-  transition: transform .5s ease-in-out;
+  transition: transform 0.5s ease-in-out;
+}
+
+select.timezone-select {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+select.manual-control-select {
+  position: absolute;
+  top: 90px;
+  left: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.hour-hand,
+.minute-hand,
+.second-hand {
+  cursor: pointer;
 }
