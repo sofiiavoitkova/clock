@@ -51,15 +51,6 @@ function setCurrentTime() {
   }
 }
 
-function startClock() {
-  setCurrentTime();
-  intervalId = setInterval(setCurrentTime, 1000);
-}
-
-function stopClock() {
-  clearInterval(intervalId);
-}
-
 const timeZoneSelector = document.createElement("select");
 timeZoneSelector.classList.add("timezone-select");
 timeZones.forEach((zone) => {
@@ -84,6 +75,15 @@ manualControls.forEach((control) => {
   option.textContent = control.name;
   manualControlSelector.appendChild(option);
 });
+
+function startClock() {
+  setCurrentTime();
+  intervalId = setInterval(setCurrentTime, 1000);
+}
+
+function stopClock() {
+  clearInterval(intervalId);
+}
 
 function getHandAngle(hand) {
   const transform = getComputedStyle(hand).transform;
