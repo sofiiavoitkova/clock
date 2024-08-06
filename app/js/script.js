@@ -60,8 +60,6 @@ function stopClock() {
   clearInterval(intervalId);
 }
 
-startClock();
-
 const timeZoneSelector = document.createElement("select");
 timeZoneSelector.classList.add("timezone-select");
 timeZones.forEach((zone) => {
@@ -86,6 +84,30 @@ manualControls.forEach((control) => {
   option.textContent = control.name;
   manualControlSelector.appendChild(option);
 });
+
+function getHandAngle(hand) {
+  const transform = getComputedStyle(hand).transform;
+  if (transform === "none") return 0;
+  const values = transform.split("(")[1].split(")")[0].split(",");
+  const a = values[0];
+  const b = values[1];
+  const angle = Math.atan2(b, a) * (180 / Math.PI);
+  return angle >= 0 ? angle : 360 + angle;
+}
+
+function getClockTime() {
+  const hourAngle = getHandAngle(document.querySelector("#hour"));
+  const minuteAngle = getHandAngle(document.querySelector("#minute"));
+  const secondAngle = getHandAngle(document.querySelector("#second"));
+
+  const hours = Math.floor(hourAngle / 30) % 12;
+  const minutes = Math.floor(minuteAngle / 6);
+  const seconds = Math.floor(secondAngle / 6);
+
+  const now = new Date();
+  now.setHours(hours, minutes, seconds, 0);
+  return now;
+}
 
 document.querySelector(".main").appendChild(manualControlSelector);
 
@@ -114,15 +136,15 @@ const hourHand = document.querySelector("#hour");
 const minuteHand = document.querySelector("#minute");
 const secondHand = document.querySelector("#second");
 
-function addHandListener(hand) {
-  hand.addEventListener("mousedown", (event) => {
-    startDraggingHand(hand, event);
-  });
-}
-
 addHandListener(hourHand);
 addHandListener(minuteHand);
 addHandListener(secondHand);
+
+function stopDragging() {
+  document.onmousemove = null;
+  document.onmouseup = null;
+  customTime = getClockTime();
+}
 
 function startDraggingHand(hand, event) {
   if (!isPaused) return;
@@ -141,33 +163,10 @@ function startDraggingHand(hand, event) {
   };
 }
 
-function stopDragging() {
-  document.onmousemove = null;
-  document.onmouseup = null;
-  customTime = getClockTime();
-  //console.log(`Time is set to: ${customTime}`);
+function addHandListener(hand) {
+  hand.addEventListener("mousedown", (event) => {
+    startDraggingHand(hand, event);
+  });
 }
 
-function getHandAngle(hand) {
-  const transform = getComputedStyle(hand).transform;
-  if (transform === "none") return 0;
-  const values = transform.split("(")[1].split(")")[0].split(",");
-  const a = values[0];
-  const b = values[1];
-  const angle = Math.atan2(b, a) * (180 / Math.PI);
-  return angle >= 0 ? angle : 360 + angle;
-}
-
-function getClockTime() {
-  const hourAngle = getHandAngle(document.querySelector("#hour"));
-  const minuteAngle = getHandAngle(document.querySelector("#minute"));
-  const secondAngle = getHandAngle(document.querySelector("#second"));
-
-  const hours = Math.floor(hourAngle / 30) % 12;
-  const minutes = Math.floor(minuteAngle / 6);
-  const seconds = Math.floor(secondAngle / 6);
-
-  const now = new Date();
-  now.setHours(hours, minutes, seconds, 0);
-  return now;
-}
+startClock();
